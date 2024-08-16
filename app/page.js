@@ -19,8 +19,8 @@ export default function Home() {
           </Typography>
           <Box>
             <SignedOut>
-              <Button color="inherit" sx={{ mr: 1 }}>Login</Button>
-              <Button variant="outlined" sx={{ borderColor: "#fff", color: "#fff" }}>Sign Up</Button>
+              <Button color="inherit"  href="/sign-in">Login</Button>
+              <Button variant="inherit" href="/sign-up">Sign Up</Button>
             </SignedOut>
             <SignedIn>
               <UserButton />

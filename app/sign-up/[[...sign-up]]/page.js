@@ -1,10 +1,10 @@
-import { SignIn } from "@clerk/nextjs";
+import { SignIn, SignUp } from "@clerk/nextjs";
 import { Toolbar, Container, AppBar, Typography, Button, Box } from "@mui/material";
 import Link from "next/link";
 
 export default function SignUpPage() {
     return (
-      <Container maxWidth="100vw">
+      <Container maxWidth="100vw" >
         <AppBar position="static" sx={{ backgroundColor: "#865CA6", boxShadow: "none" }}>
           <Toolbar>
             <Typography variant="h6" sx={{ flexGrow: 1 }}>
@@ -36,8 +36,8 @@ export default function SignUpPage() {
             backgroundSize: "cover",
           }}
         >
-          <Typography variant="h4" gutterBottom>Sign In</Typography>
-          <SignIn />
+          <Typography variant="h4" gutterBottom>Sign Up</Typography>
+          <SignUp />
         </Box>
       </Container>
     );
