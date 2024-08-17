@@ -15,38 +15,48 @@ User-Focused Design: Consider the user’s perspective and learning goals when c
 Review and Iterate: Regularly review and update flashcards to ensure they remain relevant, accurate, and effective. Incorporate feedback and refine the content to improve its educational value.
 Your goal is to help users effectively learn and retain information by providing them with well-crafted flashcards that make studying efficient and engaging.
 
-returm the flashcard in the following format:
+Only generate 10 Flashcards.
+Return the flashcards in the following JSON format:
 
 {
     "flashcards": [
-    {
-        "front": str,
-        "back": str
-    }
+        {
+            "front": "string",
+            "back": "string"
+        }
     ]
 }`
 
+export async function POST(req) {
+    try {
+        const openai = new OpenAI();
+        const data = await req.text();
 
-export async function POST(req){
-    const openai = OpenAI()
-    const data = await req.text()
+        const completion = await openai.chat.completions.create({
+            model: 'gpt-3.5-turbo',
+            messages: [
+                {
+                    role: 'system',
+                    content: systemPrompt
+                },
+                {
+                    role: 'user',
+                    content: data
+                }
+            ],
+        });
 
-    const completion = await openai.chat.completion.create({
-        messages: [
-            {
-                role: 'system',
-                content: systemPrompt
-            },
-            {
-                role: 'user',
-                content: data
-            }
-        ],
-        model: 'gpt-3.5-turbo',
-        response_format: { type: 'json_object' }
-    })
+        if (!completion.choices || completion.choices.length === 0) {
+            throw new Error('No response from OpenAI');
+        }
 
-    const flashcards = JSON.parse(completion.data.choices[0].message.content)
+        const responseContent = completion.choices[0].message.content;
 
-    return new NextResponse.json(flashcards.flashcard)
+        const flashcards = JSON.parse(responseContent);
+
+        return NextResponse.json(flashcards.flashcards);
+    } catch (error) {
+        console.error('Error generating flashcards:', error);
+        return NextResponse.json({ error: 'Failed to generate flashcards' }, { status: 500 });
+    }
 }
